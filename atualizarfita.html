@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Informações da Fita</title>
+</head>
+<body>
+    <h1>Atualizar filmes</h1>
+    <form action="/atualizar-fita" method="POST">
+        <label for="titulo">Título</label><br />
+        <input type="text" id="titulo" name="titulo" required /><br />
+        <label for="categoria">Categoria</label><br />
+        <input type="text" id="categoria" name="categoria" required /><br />
+        <label for="novaSinopse">Sinopse</label><br />
+        <textarea id="novaSinopse" name="novaSinopse" required></textarea
+        ><br />
+        <button type="submit">Atualizar Dados</button>
+    </form>
+</body>
+</html>
