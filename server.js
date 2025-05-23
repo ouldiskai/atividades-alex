@@ -59,14 +59,14 @@ app.post('/adicionar-fita', (req, res) => {
     const novaFita = req.body;
 
     if (fitas.find(fita => fita.titulo.toLowerCase() === novaFita.titulo.toLowerCase())) {
-        res.send('<h1>Fita já em estoque.</h1>')
+        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita já em estoque.</h1>')
         return;
     }
     fitas.push(novaFita);
 
     salvarDados();
 
-    res.send('<h1>Fita adicionada com sucesso!</h1>')
+    res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita adicionada com sucesso!</h1>')
 });
 
 app.get('/atualizar-fita', (req, res) => {
@@ -74,37 +74,33 @@ app.get('/atualizar-fita', (req, res) => {
 
 })
 app.post('/atualizar-fita', (req, res) =>{
-    const {titulo, novasSinopse} = req.body;
-    let fitasData = fs.readFileSync(fitasPath, 'utf-8')
-    let fitas = JSON.parse(fitasData);
-    
-    const fitaIndex = fitas.findIndex(fita => fitas.titulo.toLowerCase() === titulo.toLowerCase());
+    const {titulo, novaSinopse, categoria} = req.body;
+    const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
     
     if (fitaIndex === -1) {
-        res.send ('<h1>Fita não encontrada </h1>');
+        res.send ('<a href="http://localhost:3000">Voltar</a><br><h1>Fita não encontrada </h1>');
         return;
     }
-    fitas[fitaIndex].desc = novaSinopse;
+    fitas[fitaIndex].sinopse = novaSinopse;
+    fitas[fitaIndex].categoria = categoria;
 
     salvarDados(fitas);
 
-    res.send('<h1> Dados da fita atualizados com sucesso </h1>');
+    res.send('<a href="http://localhost:3000">Voltar</a><br><h1> Dados da fita atualizados com sucesso </h1>');
 });
-
+-
 app.get('/retirar-fita', (req, res) => {
     res.sendFile(path.join(__dirname, 'retirarfita.html'));
 })
 
-app.post('retirar-fita', (req, res) => {
+app.post('/retirar-fita', (req, res) => {
     const { titulo } = req.body;
 
-    let fitasData = fs.readFileSync(fitasPath, 'utf-8')
-    let fitas = JSON.parse(fitasData);
 
     const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
 
     if (fitaIndex === -1) {
-        res.send('<h1>Fita não encontrada</h1>');
+        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita não encontrada</h1>');
         return;
     }
     else{
@@ -124,16 +120,13 @@ app.post('retirar-fita', (req, res) => {
 app.get('/fita-retirada', (req, res) => {
     const titulo = req.query.titulo;
 
-    let fitasData = fs.readFileSync(fitasPath, 'utf-8')
-    let fitas = JSON.parse(fitasData);
-
-    const fitaIndex = fita.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
+    const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
 
     fitas.splice(fitaIndex, 1);
 
     salvarDados(fitas);
 
-    res.send(`<h1>A fita: ${titulo} foi retirada com sucesso</h1>`);
+    res.send(`<a href="http://localhost:3000">Voltar</a><br><h1>A fita: ${titulo} foi retirada com sucesso</h1>`);
 });
 
 app.listen(port, () => {

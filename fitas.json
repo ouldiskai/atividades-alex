@@ -1,8 +1,8 @@
 [
   {
     "titulo": "Dora A Maloqueira",
-    "categoria": "Terror",
-    "sinopse": "medo medo sangue aaaaaaaaa"
+    "categoria": "terror",
+    "sinopse": "horror teste teste 1"
   },
   {
     "titulo": "A Volta dos que não Foram",
@@ -15,8 +15,13 @@
     "sinopse": "filme 1 sinopse"
   },
   {
-    "titulo": "daw",
-    "categoria": "daw",
-    "conteudo": "daw"
+    "titulo": "dawe",
+    "categoria": "terror",
+    "sinopse": "aaaaaaaaa"
+  },
+  {
+    "titulo": "Indiana Jones",
+    "categoria": "Aventura",
+    "sinopse": "sinopse"
   }
 ]
