@@ -5,128 +5,128 @@ const express = require('express')
 const app = express();
 const port = 3000;
 
-const fitasPath = path.join(__dirname, 'fitas.json');
+const tarefasPath = path.join(__dirname, 'tarefas.json');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let fitasData = fs.readFileSync(fitasPath, 'utf-8')
-let fitas = JSON.parse(fitasData);
+let tarefasData = fs.readFileSync(tarefasPath, 'utf-8')
+let tarefas = JSON.parse(tarefasData);
 
-function buscarFitaPorTitulo(titulo) {
-    return fitas.find(fita =>
-        fita.titulo.toLowerCase() === titulo.toLowerCase());
+function buscarTarefaPorTitulo(titulo) {
+    return tarefas.find(tarefa =>
+        tarefa.titulo.toLowerCase() === titulo.toLowerCase());
 }
 
-function buscarFitaPorCategoria(categoria) {
-    return fitas.find(fita =>
-        fita.categoria.toLowerCase() === categoria.toLowerCase());
+function buscarTarefaPorMateria(materia) {
+    return tarefas.find(tarefa =>
+        tarefa.materia.toLowerCase() === materia.toLowerCase());
 }
 
 app.get("/", (req, res) =>{
     res.sendFile(path.join(__dirname, "index.html"))
 })
-app.get('/encontrar-fita', (req, res) => {
-    res.sendFile(path.join(__dirname, "encontrarfita.html"))
+app.get('/encontrar-tarefa', (req, res) => {
+    res.sendFile(path.join(__dirname, "encontrartarefa.html"))
 })
 
-app.post('/encontrar-fita', (req, res) => {
-    const tituloFita = req.body;
-    const categoriaFita = req.body;
-    const fitaEncontrada = buscarFitaPorTitulo(tituloFita.titulo) || buscarFitaPorCategoria(categoriaFita.categoria);
+app.post('/encontrar-tarefa', (req, res) => {
+    const tituloTarefa = req.body;
+    const materiaTarefa = req.body;
+    const tarefaEncontrada = buscarTarefaPorTitulo(tituloTarefa.titulo) || buscarTarefaPorMateria(materiaTarefa.materia);
 
-    if (fitaEncontrada) {
-        res.send(`<a href="http://localhost:3000">Voltar</a><br><br><h1>Fita encontrada:</h1><pre>
-        ${JSON.stringify(fitaEncontrada, null, 2)}</pre>`);
+    if (tarefaEncontrada) {
+        res.send(`<a href="http://localhost:3000">Voltar</a><br><br><h1>Tarefa encontrada:</h1><pre>
+        ${JSON.stringify(tarefaEncontrada, null, 2)}</pre>`);
     } else {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><br><h1>Fita não foi encontrada</h1>');
+        res.send('<a href="http://localhost:3000">Voltar</a><br><br><h1>Tarefa não foi encontrada</h1>');
     }
 })
 
-function salvarDados(fita) {
-    fs.writeFileSync(fitasPath, JSON.stringify(fitas, null, 2));
+function salvarDados(tarefa) {
+    fs.writeFileSync(tarefasPath, JSON.stringify(tarefas, null, 2));
 }
 
-app.get('/adicionar-fita', (req, res) => {
-    res.sendFile(path.join(__dirname, 'adicionarfita.html'));
+app.get('/marcar-tarefa', (req, res) => {
+    res.sendFile(path.join(__dirname, 'marcartarefa.html'));
 });
 
 app.get("/ver-todas", (req, res) => {
-    res.send(`<a href="http://localhost:3000">Voltar</a><br><br><pre>${JSON.stringify(fitas, null, 2)}</pre>`)
+    res.send(`<a href="http://localhost:3000">Voltar</a><br><br><pre>${JSON.stringify(tarefas, null, 2)}</pre>`)
 })
 
-app.post('/adicionar-fita', (req, res) => {
-    const novaFita = req.body;
+app.post('/marcar-tarefas', (req, res) => {
+    const novaTarefa = req.body;
 
-    if (fitas.find(fita => fita.titulo.toLowerCase() === novaFita.titulo.toLowerCase())) {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita já em estoque.</h1>')
+    if (tarefas.find(tarefa => tarefa.titulo.toLowerCase() === novaTarefa.titulo.toLowerCase())) {
+        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa já marcada.</h1>')
         return;
     }
-    fitas.push(novaFita);
+    tarefas.push(novaTarefa);
 
     salvarDados();
 
-    res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita adicionada com sucesso!</h1>')
+    res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa marcada com sucesso!</h1>')
 });
 
-app.get('/atualizar-fita', (req, res) => {
-    res.sendFile(path.join(__dirname, 'atualizarfita.html'))
+app.get('/atualizar-tarefa', (req, res) => {
+    res.sendFile(path.join(__dirname, 'atualizartarefa.html'))
 
 })
-app.post('/atualizar-fita', (req, res) =>{
-    const {titulo, novaSinopse, categoria} = req.body;
-    const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
+app.post('/atualizar-tarefa', (req, res) =>{
+    const {titulo, descricao, materia} = req.body;
+    const tarefaIndex = tarefas.findIndex(tarefa => tarefa.titulo.toLowerCase() === titulo.toLowerCase());
     
-    if (fitaIndex === -1) {
-        res.send ('<a href="http://localhost:3000">Voltar</a><br><h1>Fita não encontrada </h1>');
+    if (tarefaIndex === -1) {
+        res.send ('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa não encontrada </h1>');
         return;
     }
-    fitas[fitaIndex].sinopse = novaSinopse;
-    fitas[fitaIndex].categoria = categoria;
+    tarefas[tarefaIndex].descricao = descricao;
+    tarefas[tarefaIndex].materia = materia;
 
-    salvarDados(fitas);
+    salvarDados(tarefas);
 
-    res.send('<a href="http://localhost:3000">Voltar</a><br><h1> Dados da fita atualizados com sucesso </h1>');
+    res.send('<a href="http://localhost:3000">Voltar</a><br><h1> Dados da tarefa atualizados com sucesso </h1>');
 });
 -
-app.get('/retirar-fita', (req, res) => {
-    res.sendFile(path.join(__dirname, 'retirarfita.html'));
+app.get('/retirar-tarefa', (req, res) => {
+    res.sendFile(path.join(__dirname, 'retirartarefa.html'));
 })
 
-app.post('/retirar-fita', (req, res) => {
+app.post('/retirar-tarefa', (req, res) => {
     const { titulo } = req.body;
 
 
-    const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
+    const tarefaIndex = tarefas.findIndex(tarefa => tarefa.titulo.toLowerCase() === titulo.toLowerCase());
 
-    if (fitaIndex === -1) {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Fita não encontrada</h1>');
+    if (tarefaIndex === -1) {
+        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa não encontrada</h1>');
         return;
     }
     else{
         res.send(`
         <script>
-        if (confirm('Deseja excluir a fita ${titulo}?')){
-            window.location.href = '/fita-retirada?titulo=${titulo}'
+        if (confirm('Deseja excluir a tarefa ${titulo}?')){
+            window.location.href = '/tarefa-retirada?titulo=${titulo}'
         }
         else{
-            window.locatio.href = '/retirar-fita';
+            window.locatio.href = '/retirar-tarefa';
         }
         </script>
         `)
     }
 })
 
-app.get('/fita-retirada', (req, res) => {
+app.get('/tarefa-retirada', (req, res) => {
     const titulo = req.query.titulo;
 
-    const fitaIndex = fitas.findIndex(fita => fita.titulo.toLowerCase() === titulo.toLowerCase());
+    const tarefaIndex = tarefas.findIndex(tarefa => tarefa.titulo.toLowerCase() === titulo.toLowerCase());
 
-    fitas.splice(fitaIndex, 1);
+    tarefas.splice(tarefaIndex, 1);
 
-    salvarDados(fitas);
+    salvarDados(tarefas);
 
-    res.send(`<a href="http://localhost:3000">Voltar</a><br><h1>A fita: ${titulo} foi retirada com sucesso</h1>`);
+    res.send(`<a href="http://localhost:3000">Voltar</a><br><h1>A tarefa: ${titulo} foi retirada com sucesso</h1>`);
 });
 
 app.listen(port, () => {

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar novo trabalho</title>
+</head>
+
+<body>
+    <a href="http://localhost:3000">Voltar</a>
+    <h1>Adicionar nova fita</h1>
+    <form action="http://localhost:3000/adicionar-tarefa" method="POST">
+        <label for="titulo">Título:</label><br>
+        <input type="text" id="titulo" name="titulo" required><br><br>
+
+        <label for="materia">Matéria:</label><br>
+        <input type="text" id="materia" name="materia"><br><br>
+
+        <label for="descricao">Descrição:</label><br>
+        <textarea id="descricao" name="descricao" required></textarea><br><br>
+
+        <button type="submit">Adicionar</button><br>
+    </form>
+</body>
+
+</html>

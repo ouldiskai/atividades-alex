@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Informações da Fita</title>
+</head>
+<body>
+    <a href="http://localhost:3000">Voltar</a>
+    <h1>Atualizar tarefa</h1>
+    <form action="/atualizar-tarefa" method="POST">
+        <label for="titulo">Título</label><br />
+        <input type="text" id="titulo" name="titulo" required /><br />
+        <label for="materia">Matéria</label><br />
+        <input type="text" id="materia" name="materia" required /><br />
+        <label for="descricao">Descrição</label><br />
+        <textarea id="descricao" name="descricao" required></textarea
+        ><br />
+        <button type="submit">Atualizar dados da tarefa</button>
+    </form>
+</body>
+</html>
