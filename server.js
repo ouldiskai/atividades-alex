@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 let tarefasData = fs.readFileSync(tarefasPath, 'utf-8')
 let tarefas = JSON.parse(tarefasData);
 
+
 function buscarTarefaPorTitulo(titulo) {
     return tarefas.find(tarefa =>
         tarefa.titulo.toLowerCase() === titulo.toLowerCase());
@@ -22,9 +23,25 @@ function buscarTarefaPorMateria(materia) {
     return tarefas.find(tarefa =>
         tarefa.materia.toLowerCase() === materia.toLowerCase());
 }
-
-app.get("/", (req, res) =>{
+app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname, "index.html"))
+})
+app.get("/ver-todas", (req, res) =>{
+    let tarefasTable = '';
+
+    tarefas.forEach(tarefa =>{
+        tarefasTable += `
+        <tr>
+            <td>${tarefa.titulo}</td>
+            <td>${tarefa.materia}</td>
+            <td>${tarefa.descricao}</td>
+            `
+    });
+
+    const htmlContent = fs.readFileSync('todastarefas.html', 'utf-8');
+    const finalHtml = htmlContent.replace('{{tarefasTable}}', tarefasTable)
+
+    res.send(finalHtml)
 })
 app.get('/encontrar-tarefa', (req, res) => {
     res.sendFile(path.join(__dirname, "encontrartarefa.html"))
@@ -47,7 +64,7 @@ function salvarDados(tarefa) {
     fs.writeFileSync(tarefasPath, JSON.stringify(tarefas, null, 2));
 }
 
-app.get('/marcar-tarefa', (req, res) => {
+app.get('/marcar-tarefa', (req, res) => { 
     res.sendFile(path.join(__dirname, 'marcartarefa.html'));
 });
 
@@ -55,7 +72,7 @@ app.get("/ver-todas", (req, res) => {
     res.send(`<a href="http://localhost:3000">Voltar</a><br><br><pre>${JSON.stringify(tarefas, null, 2)}</pre>`)
 })
 
-app.post('/marcar-tarefas', (req, res) => {
+app.post('/marcar-tarefa', (req, res) => {
     const novaTarefa = req.body;
 
     if (tarefas.find(tarefa => tarefa.titulo.toLowerCase() === novaTarefa.titulo.toLowerCase())) {
