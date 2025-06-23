@@ -26,6 +26,17 @@ function buscarTarefaPorMateria(materia) {
 app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname, "index.html"))
 })
+
+function tabelasFormat(tarefa){
+    tarefasTable = "";
+    tarefasTable += `
+    <tr>
+        <td>${tarefa.titulo}</td>
+        <td>${tarefa.materia}</td>
+        <td>${tarefa.descricao}</td>
+        `
+    return tarefasTable
+}
 app.get("/ver-todas", (req, res) =>{
     let tarefasTable = '';
 
@@ -53,15 +64,18 @@ app.post('/encontrar-tarefa', (req, res) => {
     const tarefaEncontrada = buscarTarefaPorTitulo(tituloTarefa.titulo) || buscarTarefaPorMateria(materiaTarefa.materia);
 
     if (tarefaEncontrada) {
-        res.send(`<a href="http://localhost:3000">Voltar</a><br><br><h1>Tarefa encontrada:</h1><pre>
-        ${JSON.stringify(tarefaEncontrada, null, 2)}</pre>`);
+        let tarefasTable = tabelasFormat(tarefaEncontrada)
+        const htmlContent = fs.readFileSync('todastarefas.html', 'utf-8');
+        const finalHtml = htmlContent.replace('{{tarefasTable}}', tarefasTable)
+
+        res.send(finalHtml)
     } else {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><br><h1>Tarefa não foi encontrada</h1>');
+        res.send('<a href="http://localhost:3000">Voltar</a><br><br><div class="position-absolute top-50 start-50 translate-middle"<h1>Tarefa não foi encontrada</h1></div>');
     }
 })
 
 function salvarDados(tarefa) {
-    fs.writeFileSync(tarefasPath, JSON.stringify(tarefas, null, 2));
+    fs.writeFileSync(tarefasPath, JSON.stringify(tarefas, null, 2));    
 }
 
 app.get('/marcar-tarefa', (req, res) => { 
@@ -76,14 +90,18 @@ app.post('/marcar-tarefa', (req, res) => {
     const novaTarefa = req.body;
 
     if (tarefas.find(tarefa => tarefa.titulo.toLowerCase() === novaTarefa.titulo.toLowerCase())) {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa já marcada.</h1>')
+        res.send(`<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <body><a href="http://localhost:3000" class="btn btn-primary">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"><h1>Tarefa já marcada.</h1></div></body>`)
         return;
     }
     tarefas.push(novaTarefa);
 
     salvarDados();
 
-    res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa marcada com sucesso!</h1>')
+    res.send(`<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <a class="btn btn-primary" href="http://localhost:3000">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"<h1>Tarefa marcada com sucesso!</h1></div>`)
 });
 
 app.get('/atualizar-tarefa', (req, res) => {
@@ -95,7 +113,7 @@ app.post('/atualizar-tarefa', (req, res) =>{
     const tarefaIndex = tarefas.findIndex(tarefa => tarefa.titulo.toLowerCase() === titulo.toLowerCase());
     
     if (tarefaIndex === -1) {
-        res.send ('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa não encontrada </h1>');
+        res.send ('<a href="http://localhost:3000">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"<h1>Tarefa não encontrada </h1></div>');
         return;
     }
     tarefas[tarefaIndex].descricao = descricao;
@@ -103,7 +121,7 @@ app.post('/atualizar-tarefa', (req, res) =>{
 
     salvarDados(tarefas);
 
-    res.send('<a href="http://localhost:3000">Voltar</a><br><h1> Dados da tarefa atualizados com sucesso </h1>');
+    res.send('<a href="http://localhost:3000">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"<h1> Dados da tarefa atualizados com sucesso </h1></div>');
 });
 -
 app.get('/retirar-tarefa', (req, res) => {
@@ -117,7 +135,7 @@ app.post('/retirar-tarefa', (req, res) => {
     const tarefaIndex = tarefas.findIndex(tarefa => tarefa.titulo.toLowerCase() === titulo.toLowerCase());
 
     if (tarefaIndex === -1) {
-        res.send('<a href="http://localhost:3000">Voltar</a><br><h1>Tarefa não encontrada</h1>');
+        res.send('<a href="http://localhost:3000">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"<h1>Tarefa não encontrada</h1></div>');
         return;
     }
     else{
@@ -127,7 +145,7 @@ app.post('/retirar-tarefa', (req, res) => {
             window.location.href = '/tarefa-retirada?titulo=${titulo}'
         }
         else{
-            window.locatio.href = '/retirar-tarefa';
+            window.location.href = '/retirar-tarefa';
         }
         </script>
         `)
@@ -143,7 +161,7 @@ app.get('/tarefa-retirada', (req, res) => {
 
     salvarDados(tarefas);
 
-    res.send(`<a href="http://localhost:3000">Voltar</a><br><h1>A tarefa: ${titulo} foi retirada com sucesso</h1>`);
+    res.send(`<a href="http://localhost:3000">Voltar</a><br><div class="position-absolute top-50 start-50 translate-middle"<h1>A tarefa: ${titulo} foi retirada com sucesso</h1></div>`);
 });
 
 app.listen(port, () => {
