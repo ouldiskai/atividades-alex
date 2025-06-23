@@ -10,35 +10,35 @@
 </head>
 
 <body>
-    <div class="mx-auto p-12" style="width: 500px;">
-        <div class="position-absolute top-50 translate-middle-y">
-            <div class="card text-center">      
-                <a href="http://localhost:3000" class="text-start"><button type="button" class="btn-close" aria-label="Close"></button></a>
-                
-                <div class="card-header">
-                    <h1>Marcar nova tarefa</h1>
-                </div>
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="mx-auto p-2" style="width: 600px;">
+            <div class="align-middle">
+                <div class="card text-center">
+                    <div class="position-absolute top-0 start-0">
+                        <a href="http://localhost:3000" class="">
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </a>
+                    </div>
 
-                <div class="card-body">
+                    <h1>Marcar nova tarefa</h1>
 
                     <form action="http://localhost:3000/marcar-tarefa" method="POST">
 
-                        <label for="titulo">Título:</label><br>
-                        <input type="text" id="titulo" name="titulo" required><br><br>
+                        <label for="titulo">Título</label><br />
+                        <input type="text" id="titulo" name="titulo" required /><br />
 
-                        <label for="materia">Matéria:</label><br>
-                        <input type="text" id="materia" name="materia"><br><br>
+                        <label for="materia">Matéria</label><br />
+                        <input type="text" id="materia" name="materia" required /><br />
 
-                        <label for="descricao">Descrição:</label><br>
-                        <textarea id="descricao" name="descricao" required></textarea><br><br>
+                        <label for="descricao">Descrição</label><br />
+                        <textarea id="descricao" name="descricao" required></textarea><br />
 
-                        <button class="btn btn-primary" type="submit">Adicionar</button><br>
-                    
+                        <button class="btn btn-primary" type="submit">Adicionar</button>
                     </form>
 
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </body>
 

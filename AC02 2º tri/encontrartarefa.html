@@ -10,25 +10,34 @@
 
 <body>
     <div class="position-absolute top-50 start-50 translate-middle">
-    <div class="mx-auto p-2" style="width: 500px;">
-        <div class="align-middle">
-            <div class="card text-center"> 
-                <a href="http://localhost:3000" class="text-start"><button type="button" class="btn-close"
-                        aria-label="Close"></button></a>
-                <h1>Encontrar tarefa</h1>
-                <form action="http://localhost:3000/encontrar-tarefa" method="POST">
-                    <label for="titulo">Título:</label><br>
-                    <input type="text" id="titulo" name="titulo"><br>
-                    <button type="submit">Encontrar tarefa por título</button><br><br>
+        <div class="mx-auto p-2" style="width: 600px;">
+            <div class="align-middle">
+                <div class="card text-center">
+                    <div class="position-absolute top-0 start-0">
+                        <a href="http://localhost:3000" class="">
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </a>
+                    </div>
 
-                    <label for="materia">Matéria:</label><br>
-                    <input type="text" id="materia" name="materia"><br>
-                    <button type="submit">Encontrar tarefa por matéria</button>
-                </form>                
+                    <h1>Encontrar tarefa</h1>
+
+                    <form action="http://localhost:3000/encontrar-tarefa" method="POST">
+                        <label for="titulo">Título</label><br />
+                        <input type="text" id="titulo" name="titulo" /><br /><br>
+
+                        <button type="submit" class="btn btn-primary">Encontrar tarefa por título</button><br />
+
+                        <label for="materia">Matéria</label><br />
+                        <input type="text" id="materia" name="materia" /><br /><br>
+
+                        <button type="submit" class="btn btn-primary">Encontrar tarefa por matéria</button><br>
+                        
+                    </form>
+
+                </div>
             </div>
-        </div> 
-    </div>  
-</div>
+        </div>
+    </div>
 </body>
 
 </html>
